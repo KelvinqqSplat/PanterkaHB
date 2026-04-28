@@ -97,7 +97,7 @@
             padding: 15px;
             margin-bottom: 25px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            position: relative; /* для позиционирования overlay */
+            position: relative;
         }
         .photo-item img {
             width: 100%;
@@ -113,7 +113,6 @@
             padding: 5px 15px;
             border-radius: 40px;
         }
-        /* Стили для слоя "мыло" */
         .photo-overlay {
             position: absolute;
             top: 15px;
@@ -141,7 +140,6 @@
             50% { backdrop-filter: blur(8px); background: rgba(255, 248, 200, 0.95);}
             100% { backdrop-filter: blur(12px); background: rgba(255, 250, 210, 0.9);}
         }
-        /* Анимация исчезновения */
         .photo-overlay.fade-out {
             animation: fadeOutScale 0.4s forwards !important;
         }
@@ -187,15 +185,16 @@
 
 <div class="card">
     <h1>🎂 С днём рождения,</h1>
-    <div class="name" id="girlName">Имя</div>
+    <div class="name" id="girlName">Надююшкинс!</div>
     <div class="message">
-        Ты появилась всего две недели назад, а уже делаешь мои дни ярче 🌼<br>
+        Мы встретились недавно, а уже многое знаем и стоим друг для друга! 🌼<br>
         <small>👇 Найди звёздочку 👇</small>
     </div>
     <div class="star" id="secretStar"></div>
     <div class="secret-text" id="secretMessage">
         🌸 <strong>Только для тебя:</strong><br><br>
-        «Я не знаю, что дарят через две недели. Поэтому дарю то, чего не купить — честное "ты мне очень нравишься". Твоя улыбка и то, как ты радуешься цветам — это уже подарок для меня. Спасибо, что ты есть. С днём рождения!»<br>
+        «Я знаю что возможно ждала многое, но в данный момент все что имею все в обороте на период времени чуть дальше, не только для меня но и для того чтобы могли спонтанно выехать ночью на заправку или куда более чтобы проводить красиво время. Поэтому - твоя улыбка и то, как ты радуешься цветам — это уже подарок для меня💋 Спасибо, что ты есть. С днём рождения🎉
+Это еще не все)»<br>
         🌟 А теперь смотри ниже — там ещё кое-что.
     </div>
     <button id="flowerBtn">🌸 Рассыпать цветы</button>
@@ -204,21 +203,34 @@
 <div class="photos" id="photosBlock">
     <h3 style="color:#d45a7a; text-align:center;">📸 Мои любимые моменты</h3>
     
-    <!-- ===== ФОТОГРАФИИ (каждая обернётся в мыло автоматически) ===== -->
+    <!-- ===== 5 ФОТОГРАФИЙ ===== -->
+    <!-- Фото 1 -->
     <div class="photo-item">
-        <img src="photo1.jpg" alt="Фото 1" onerror="this.src='https://placehold.co/400x300?text=Добавь+фото+1'">
+        <img src="photo1.jpg" alt="Фото 1" onerror="this.src='https://placehold.co/400x300?text=Фото+1'">
         <p>💛 Твоя улыбка — моя слабость</p>
     </div>
+    <!-- Фото 2 -->
     <div class="photo-item">
-        <img src="photo2.jpg" alt="Фото 2" onerror="this.src='https://placehold.co/400x300?text=Добавь+фото+2'">
+        <img src="photo2.jpg" alt="Фото 2" onerror="this.src='https://placehold.co/400x300?text=Фото+2'">
         <p>🌿 Искренняя и настоящая</p>
     </div>
+    <!-- Фото 3 -->
     <div class="photo-item">
-        <img src="photo3.jpg" alt="Фото 3" onerror="this.src='https://placehold.co/400x300?text=Добавь+фото+3'">
+        <img src="photo3.jpg" alt="Фото 3" onerror="this.src='https://placehold.co/400x300?text=Фото+3'">
         <p>✨ Просто ты. Этого достаточно.</p>
     </div>
+    <!-- Фото 4 (новое) -->
+    <div class="photo-item">
+        <img src="photo4.jpg" alt="Фото 4" onerror="this.src='https://placehold.co/400x300?text=Фото+4'">
+        <p>💫 С тобой каждый день как праздник</p>
+    </div>
+    <!-- Фото 5 (новое) -->
+    <div class="photo-item">
+        <img src="photo5.jpg" alt="Фото 5" onerror="this.src='https://placehold.co/400x300?text=Фото+5'">
+        <p>🌸 Ты — моё вдохновение</p>
+    </div>
 
-    <!-- Большой текст в жёлтой рамке после всех фото (уже не внутри photo-item) -->
+    <!-- Большой текст в жёлтой рамке после всех фото -->
     <div style="background: #fffacd; border: 3px solid #ffcc00; border-radius: 32px; padding: 25px 20px; margin-top: 30px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.05);">
         <p style="font-size: 1.5rem; color: #b45f2b; font-weight: 500; line-height: 1.4; margin: 0;">
             ✨ Здесь ты напишешь свой большой текст ✨<br>
@@ -232,31 +244,24 @@
     // Замени "Имя" на её имя
     document.getElementById('girlName').innerText = "ЕЁ ИМЯ ❤️";
 
-    // ========== ДОБАВЛЯЕМ "МЫЛО" НА КАЖДУЮ ФОТОГРАФИЮ ==========
+    // Добавляем "мыло" на каждое фото
     function addOverlaysToPhotos() {
         const photoItems = document.querySelectorAll('.photo-item');
         photoItems.forEach(item => {
-            // Находим изображение внутри
             const img = item.querySelector('img');
             if (!img) return;
             
-            // Создаём слой-завесу ("мыло")
             const overlay = document.createElement('div');
             overlay.className = 'photo-overlay';
-            // Добавляем текст (можно изменить)
             overlay.innerHTML = '🌸 Нажми, чтобы открыть фото 🌸<br><span style="font-size:0.9rem;">✨ Сюрприз ✨</span>';
             overlay.style.display = 'flex';
-            
-            // Добавляем слой в photo-item, но так, чтобы он был поверх img
             item.style.position = 'relative';
             item.appendChild(overlay);
             
-            // По клику на слой - он исчезает с анимацией
             overlay.addEventListener('click', function(e) {
                 e.stopPropagation();
                 if (overlay.classList.contains('fade-out')) return;
                 overlay.classList.add('fade-out');
-                // После окончания анимации удаляем слой
                 overlay.addEventListener('animationend', function() {
                     overlay.remove();
                 }, { once: true });
@@ -264,13 +269,9 @@
         });
     }
     
-    // Запускаем добавление после загрузки страницы
     window.addEventListener('DOMContentLoaded', addOverlaysToPhotos);
-    // ========== КОНЕЦ ==========
 
     let revealed = false;
-
-    // Клик по звезде
     const star = document.getElementById('secretStar');
     const secretDiv = document.getElementById('secretMessage');
     const photosDiv = document.getElementById('photosBlock');
@@ -279,10 +280,8 @@
         if (revealed) return;
         revealed = true;
 
-        // Показать секретный текст
         secretDiv.classList.add('show');
 
-        // Конфетти
         for (let i = 0; i < 60; i++) {
             let conf = document.createElement('div');
             conf.classList.add('confetti');
@@ -292,17 +291,13 @@
             setTimeout(() => conf.remove(), 1000);
         }
 
-        // Показать фото через 0.3 секунды
         setTimeout(() => {
             photosDiv.classList.add('show');
-            // Прокрутка к фото
             photosDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 300);
     });
 
-    // Цветы при клике на любом месте
     document.body.addEventListener('click', function(e) {
-        // Не срабатывает, если клик на звезде или кнопке
         if (e.target === star || e.target === document.getElementById('flowerBtn')) return;
         let flower = document.createElement('div');
         let flowers = ['🌸','🌼','🌻','💖','🌸','🌺'];
@@ -314,7 +309,6 @@
         setTimeout(() => flower.remove(), 2300);
     });
 
-    // Кнопка "рассыпать цветы"
     document.getElementById('flowerBtn').addEventListener('click', function() {
         for (let i = 0; i < 30; i++) {
             setTimeout(() => {
