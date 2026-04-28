@@ -179,6 +179,89 @@
         @keyframes fall {
             to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
+
+        /* Стили для кнопки "Предвкушения" – изначально скрыта */
+        .future-button {
+            display: none;   /* спрятана до нажатия звезды */
+            background: #ffb347;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 20px auto 10px auto;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: 0.2s;
+            text-align: center;
+            width: fit-content;
+        }
+        .future-button:hover {
+            background: #ff8c1a;
+            transform: scale(1.02);
+        }
+
+        /* Контейнер для выезжающей картинки */
+        .sliding-image-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10000;
+            overflow: hidden;
+        }
+
+        .sliding-image {
+            position: absolute;
+            right: -300px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;           /* чуть шире, под машину */
+            height: auto;
+            border-radius: 16px;    /* без рамки, как просил */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: none;
+            pointer-events: auto;
+        }
+
+        .sliding-image.slide-in {
+            animation: slideFromRightToCenter 2s ease forwards;
+        }
+
+        .sliding-image.slide-out {
+            animation: slideFromCenterToLeft 2s ease forwards;
+        }
+
+        @keyframes slideFromRightToCenter {
+            0% {
+                right: -300px;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                right: 50%;
+                transform: translate(50%, -50%);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideFromCenterToLeft {
+            0% {
+                right: 50%;
+                transform: translate(50%, -50%);
+                opacity: 1;
+            }
+            100% {
+                right: 100%;
+                transform: translate(0%, -50%);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -188,12 +271,13 @@
     <div class="name" id="girlName">Надююшкинс!</div>
     <div class="message">
         Мы встретились недавно, а уже многое знаем и стоим друг для друга! 🌼<br>
+	<small>🎂 Это мое поздравление для тебя 🎂</small>
         <small>👇 Найди звёздочку 👇</small>
     </div>
     <div class="star" id="secretStar"></div>
     <div class="secret-text" id="secretMessage">
         🌸 <strong>Только для тебя:</strong><br><br>
-        «Я знаю что возможно ждала многое, но в данный момент все что имею все в обороте на период времени чуть дальше, не только для меня но и для того чтобы могли спонтанно выехать ночью на заправку или куда более чтобы проводить красиво время. Поэтому - твоя улыбка и то, как ты радуешься цветам — это уже подарок для меня💋 Спасибо, что ты есть🤗 С днём рождения Черненькая Пантерочка🎉»<br>
+        «Я знаю что возможно ждала многое, но в данный момент все что имею - все в обороте на период времени чуть дальше, не только для меня но и для того чтобы могли спонтанно выехать ночью на заправку или куда более чтобы проводить красиво время. Поэтому - твоя улыбка и то, как ты радуешься цветам — это уже подарок для меня💋 Спасибо, что ты есть🤗 С днём рождения Темненькая Пантерочка🎉»<br>
         🌟 А теперь смотри ниже — там ещё кое-что.
     </div>
     <button id="flowerBtn">🌸 Рассыпать цветы</button>
@@ -202,7 +286,6 @@
 <div class="photos" id="photosBlock">
     <h3 style="color:#d45a7a; text-align:center;">📸 Мои любимые моменты</h3>
     
-    <!-- ===== 5 ФОТОГРАФИЙ ===== -->
     <!-- Фото 1 -->
     <div class="photo-item">
         <img src="photo1.jpg" alt="Фото 1" onerror="this.src='https://placehold.co/400x300?text=Фото+1'">
@@ -210,70 +293,72 @@
     </div>
     <!-- Фото 2 -->
     <div class="photo-item">
-        <img src="photo2.jpg" alt="Фото 2" onerror="this.src='https://placehold.co/400x300?text=Фото+2'">
-        <p>🌿 Искренняя и настоящая</p>
+        <video src="video3.mp4" poster="preview3.jpg" controls style="width:100%; border-radius:24px;"></video>
+        <p>✨Здесь было другое, но когда увидел эту милашку я застыл и добавил эту красоту😅 конец шикарный😂</p>
     </div>
-    <!-- Фото 3 -->
+    <!-- Фото 3 (видео) -->
     <div class="photo-item">
         <video src="video2.mp4" poster="preview2.jpg" controls style="width:100%; border-radius:24px;"></video>
         <p>🎬 Здесь ты у меня очень брутальная) почему бы не добавить😛</p>
     </div>
-    <!-- Фото 4 (новое) -->
+    <!-- Фото 4 (видео) -->
     <div class="photo-item">
         <video src="video1.mp4" poster="preview1.jpg" controls style="width:100%; border-radius:24px;"></video>
         <p>🎬 Это видео мне очень понравилось🤗 как и все остальные но я не смог их просто физически всех вставить)</p>
     </div>
-    <!-- Фото 5 (новое) -->
+    <!-- Фото 5 -->
     <div class="photo-item">
         <img src="photo5.jpg" alt="Фото 5" onerror="this.src='https://placehold.co/400x300?text=Фото+5'">
-        <p>🌸 А тут ты уже готовишься к взрослому периоду, маленькая звездочка🌟</p>
+        <p>🌸 А тут ты уже готовишься к взрослому периоду и своему празднику, маленькая звездочка🌟</p>
     </div>
 
-    <!-- Большой текст в жёлтой рамке после всех фото -->
+    <!-- Большой текст в жёлтой рамке -->
     <div style="background: #fffacd; border: 3px solid #ffcc00; border-radius: 32px; padding: 25px 20px; margin-top: 30px; text-align: center; box-shadow: 0 6px 14px rgba(0,0,0,0.05);">
-        <p style="font-size: 1.0rem; color: #b45f2b; font-weight: 500; line-height: 1.4; margin: 0;">
-            ✨ Здесь ты напишешь свой большой текст ✨<br>
-             Хочу еще раз поздравить тебя взрослое уже на данный момент солнышко ☀️
-
-Желаю чтобы все твои мечты сбылись💫
-
-Желаю чтобы ты их конечно же осуществила, но и цели тоже, не путай их с мечтой✨
-
-Желаю тебе идти свой жизненный путь проходя все сложности и то о чем ты могла не рассказывать но и меня не забывай я всегда с тобой ❤️‍🩹)
-
-Желаю чтобы в будущем ты получила права быстрее меня😅
-Ну и я желательно с пивком на переднем сидел🤗
-
-Желаю чтобы твое счастье в сердечке никогда не угасало и всегда горело и делало тебя счастливой ❤️‍🔥
-
-Желаю тебе чтобы ты осуществила все свои материальные мечты, как те которые ты мне рассказывала в начале нашего знакомства🎀
-
-И хочу просто пожелать чтобы ты оставалась все такой же доброй😇, своеобразной🎀, кмс по нашему любимому спорту😴, счастливой😜, харизматичной🤭, тёплой🥰, душевной😁, искренной💗, обаятельной🌷, симпатичной и яркой чтобы в твоих глазках всегда горел ❤️‍🔥огонь❤️‍🔥 ведь они у тебя самые прекрасные и к ним не подходят слезки🤗
-
-Моей любимой пантерке😛💌
-        </p>
+    <div style="font-size: 1.0rem; color: #b45f2b; font-weight: 500; line-height: 1.4; text-align: left;">
+        <p style="margin-bottom: 16px;">✨ Хочу еще раз поздравить тебя, взрослое уже на данный момент солнышко ✨</p>
+	<p style="margin-bottom: 16px;">✨ На каждом из верхних видео и фото ты проявляешь свою личность в которой прячется солнышко которое переходит во взрослую жизнь (Не просто так я ведь их вставил😇)☀️</p>
+        <p style="margin-bottom: 16px;">Желаю, чтобы все твои мечты сбылись💫</p>
+        <p style="margin-bottom: 16px;">Желаю, чтобы ты их конечно же осуществила, но и цели тоже, не путай их с мечтой✨</p>
+        <p style="margin-bottom: 16px;">Желаю тебе идти свой жизненный путь, проходя все сложности и то, о чем ты могла не рассказывать, но и меня не забывай — я всегда с тобой ❤️‍🩹</p>
+        <p style="margin-bottom: 16px;">Желаю, чтобы в будущем ты получила права быстрее меня😅<br>Ну и я желательно с пивком на переднем сидел🤗</p>
+        <p style="margin-bottom: 16px;">Желаю, чтобы твое счастье в сердечке никогда не угасало и всегда горело, делая тебя счастливой ❤️‍🔥</p>
+        <p style="margin-bottom: 16px;">Желаю тебе осуществить все свои материальные мечты, так же те, что ты рассказывала в начале нашего знакомства🎀 (Они кстати тоже одни из моих целей так что почему бы их вдвоем не осуществить😅)</p>
+        <p style="margin-bottom: 16px;">И хочу просто пожелать, чтобы ты оставалась все такой же доброй😇, своеобразной🎀, кмс по нашему любимому спорту😴, счастливой😜, харизматичной🤭, верной💘, тёплой🥰, душевной😁, искренней💗, обаятельной🌷, симпатичной и яркой. Чтобы в твоих глазках всегда горел огонь❤️‍🔥 (ведь они у тебя самые прекрасные, и к ним не подходят слезки🤗)</p>
+        <p style="margin-bottom: 0;">Моей любимой пантерке😛💌</p>
     </div>
-    <!-- ===== КОНЕЦ БЛОКА ===== -->
 </div>
 
+<!-- Кнопка, которая изначально скрыта -->
+<div style="text-align: center;">
+    <button class="future-button" id="futureButton">🎁 Предвкушения небольшого будущего)</button>
+</div>
+
+<!-- Контейнер для выезжающей картинки (машина) -->
+<div class="sliding-image-container" id="slidingContainer">
+    <img class="sliding-image" id="slidingImg" src="future.png" alt="Машина">
+</div>
+
+<!-- Звук сигнала (положи horn.mp3 в ту же папку) -->
+<audio id="carHorn" preload="auto">
+    <source src="horn.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-    // Замени "Имя" на её имя
+    // Имя
     document.getElementById('girlName').innerText = "Надюшкинс ❤️";
 
-    // Добавляем "мыло" на каждое фото
+    // Мыло на фото
     function addOverlaysToPhotos() {
         const photoItems = document.querySelectorAll('.photo-item');
         photoItems.forEach(item => {
             const img = item.querySelector('img');
             if (!img) return;
-            
             const overlay = document.createElement('div');
             overlay.className = 'photo-overlay';
             overlay.innerHTML = '🌸 Нажми, чтобы открыть фото 🌸<br><span style="font-size:0.9rem;">✨ Сюрприз ✨</span>';
             overlay.style.display = 'flex';
             item.style.position = 'relative';
             item.appendChild(overlay);
-            
             overlay.addEventListener('click', function(e) {
                 e.stopPropagation();
                 if (overlay.classList.contains('fade-out')) return;
@@ -284,13 +369,13 @@
             });
         });
     }
-    
     window.addEventListener('DOMContentLoaded', addOverlaysToPhotos);
 
     let revealed = false;
     const star = document.getElementById('secretStar');
     const secretDiv = document.getElementById('secretMessage');
     const photosDiv = document.getElementById('photosBlock');
+    const futureButton = document.getElementById('futureButton');  // кнопка "Предвкушения"
 
     star.addEventListener('click', function() {
         if (revealed) return;
@@ -310,9 +395,12 @@
         setTimeout(() => {
             photosDiv.classList.add('show');
             photosDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // === ПОКАЗЫВАЕМ КНОПКУ ПОСЛЕ ЗВЕЗДЫ ===
+            futureButton.style.display = 'block';
         }, 300);
     });
 
+    // Цветы по клику
     document.body.addEventListener('click', function(e) {
         if (e.target === star || e.target === document.getElementById('flowerBtn')) return;
         let flower = document.createElement('div');
@@ -337,176 +425,57 @@
             }, i * 50);
         }
     });
-</script>
 
-<!-- ========== КНОПКА И ВЫЕЗЖАЮЩЕЕ ФОТО ========== -->
-<style>
-    /* Кнопка */
-    .future-button {
-        display: block;
-        background: #ffb347;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 60px;
-        color: white;
-        font-weight: bold;
-        font-size: 1.2rem;
-        margin: 20px auto 10px auto;
-        cursor: pointer;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        transition: 0.2s;
-        text-align: center;
-        width: fit-content;
-    }
-    .future-button:hover {
-        background: #ff8c1a;
-        transform: scale(1.02);
-    }
-
-    /* Контейнер для выезжающей картинки (скрыт по умолчанию) */
-    .sliding-image-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;  /* чтобы можно было кликать сквозь него */
-        z-index: 10000;
-        overflow: hidden;
-    }
-
-    /* Сама картинка, изначально спрятана справа */
-    .sliding-image {
-        position: absolute;
-        right: -300px;          /* начинаем за правым краем */
-        top: 50%;
-        transform: translateY(-50%);
-        width: 250px;           /* ширина фото, подбери под своё */
-        height: auto;
-        border-radius: 24px;
-        box-shadow: 0 20px 35px rgba(0,0,0,0.3);
-        opacity: 0.9;
-        transition: none;
-        pointer-events: auto;
-    }
-
-    /* Анимация выезда в центр */
-    .sliding-image.slide-in {
-        animation: slideFromRightToCenter 2s ease forwards;
-    }
-
-    /* Анимация уезда влево */
-    .sliding-image.slide-out {
-        animation: slideFromCenterToLeft 2s ease forwards;
-    }
-
-    @keyframes slideFromRightToCenter {
-        0% {
-            right: -300px;
-            opacity: 0;
-        }
-        50% {
-            opacity: 1;
-        }
-        100% {
-            right: 50%;
-            transform: translate(50%, -50%); /* центрирование */
-            opacity: 1;
-        }
-    }
-
-    @keyframes slideFromCenterToLeft {
-        0% {
-            right: 50%;
-            transform: translate(50%, -50%);
-            opacity: 1;
-        }
-        100% {
-            right: 100%;
-            transform: translate(0%, -50%);
-            opacity: 0;
-        }
-    }
-</style>
-
-<!-- Кнопка (вставь её туда, где хочешь, например под большим жёлтым текстом) -->
-<div style="text-align: center;">
-    <button class="future-button" id="futureButton">🎁 Предвкушения небольшого будущего)</button>
-</div>
-
-<!-- Контейнер для выезжающей картинки (невидим пока) -->
-<div class="sliding-image-container" id="slidingContainer">
-    <img class="sliding-image" id="slidingImg" src="future.jpg" alt="Предвкушение">
-</div>
-
-<!-- Звук (короткий, можно заменить на свой) -->
-<audio id="futureSound" preload="auto">
-    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
-    <!-- Если звук не загрузится, можно встроить альтернативу через Web Audio, но это проще -->
-</audio>
-
-<script>
+    // === ЛОГИКА КНОПКИ "ПРЕДВКУШЕНИЯ" С ВЫЕЗДОМ МАШИНЫ И СИГНАЛОМ ===
     (function() {
-        const button = document.getElementById('futureButton');
+        const button = futureButton;
         const img = document.getElementById('slidingImg');
-        const sound = document.getElementById('futureSound');
-        let isAnimating = false;   // чтобы нельзя было спамить кнопкой
-
-        // Убедимся, что звук может играть (некоторые браузеры требуют взаимодействия)
-        // Но кнопка уже будет после клика — ок.
+        const horn = document.getElementById('carHorn');
+        let isAnimating = false;
 
         button.addEventListener('click', function() {
-            if (isAnimating) return;  // не запускаем, если анимация уже идёт
+            if (isAnimating) return;
             isAnimating = true;
 
-            // Убираем предыдущие классы, перезапускаем
+            // Сброс анимаций
             img.classList.remove('slide-in', 'slide-out');
-            void img.offsetHeight; // форсируем рефлоу (чтобы анимация сработала заново)
+            void img.offsetHeight;
 
-            // Заменяем фото на ту картинку, которую ты хочешь (можно динамически)
-            // Например, пусть у тебя есть несколько фото — можно менять src, но пока оставим статичное.
-            // Я задам future.jpg — замени на своё имя файла.
-            img.src = 'future.png';  // поменяй на своё фото!
+            // Убедимся, что картинка правильная (future.png)
+            img.src = 'future.png';
 
-            // Показываем контейнер (на всякий случай)
-            document.getElementById('slidingContainer').style.display = 'block';
-
-            // Запускаем анимацию выезда в центр
+            // Старт анимации выезда
             img.classList.add('slide-in');
 
-            // Когда анимация выезда закончится (через 2 секунды)
-            img.addEventListener('animationend', function onEnd(e) {
+            // Звук ровно посередине анимации (через 1 секунду, т.к. вся анимация 2 секунды)
+            let hornTimer = setTimeout(() => {
+                horn.currentTime = 0;
+                horn.play().catch(e => console.log("Звук не сыграл:", e));
+            }, 1000);
+
+            // Когда анимация выезда закончится
+            img.addEventListener('animationend', function onIn(e) {
                 if (e.animationName === 'slideFromRightToCenter') {
-                    // Удаляем обработчик, чтобы не сработал повторно
-                    img.removeEventListener('animationend', onEnd);
-                    
-                    // Проигрываем звук
-                    sound.currentTime = 0;
-                    sound.play().catch(e => console.log('Звук не воспроизвёлся:', e));
-                    
-                    // Ждём 2 секунды (фото стоит на месте)
+                    img.removeEventListener('animationend', onIn);
+                    clearTimeout(hornTimer); // если звук уже сыграл, всё равно чистим таймер
+
+                    // Не проигрываем звук повторно – он уже был в середине
+                    // Ждём 2 секунды, затем уезжаем
                     setTimeout(() => {
-                        // Запускаем анимацию уезда влево
                         img.classList.remove('slide-in');
                         img.classList.add('slide-out');
-                        
-                        // После окончания уезда чистим классы и разрешаем новое нажатие
                         img.addEventListener('animationend', function onOut(e) {
                             if (e.animationName === 'slideFromCenterToLeft') {
                                 img.removeEventListener('animationend', onOut);
                                 img.classList.remove('slide-out');
                                 isAnimating = false;
-                                // опционально скрыть контейнер
-                                // document.getElementById('slidingContainer').style.display = 'none';
                             }
                         });
-                    }, 2000); // 2 секунды ожидания в центре
+                    }, 2000);
                 }
             });
         });
     })();
 </script>
-<!-- ========== КОНЕЦ БЛОКА ========== -->
-    
 </body>
 </html>
