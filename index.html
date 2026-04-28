@@ -338,5 +338,175 @@
         }
     });
 </script>
+
+<!-- ========== КНОПКА И ВЫЕЗЖАЮЩЕЕ ФОТО ========== -->
+<style>
+    /* Кнопка */
+    .future-button {
+        display: block;
+        background: #ffb347;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 60px;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin: 20px auto 10px auto;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: 0.2s;
+        text-align: center;
+        width: fit-content;
+    }
+    .future-button:hover {
+        background: #ff8c1a;
+        transform: scale(1.02);
+    }
+
+    /* Контейнер для выезжающей картинки (скрыт по умолчанию) */
+    .sliding-image-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;  /* чтобы можно было кликать сквозь него */
+        z-index: 10000;
+        overflow: hidden;
+    }
+
+    /* Сама картинка, изначально спрятана справа */
+    .sliding-image {
+        position: absolute;
+        right: -300px;          /* начинаем за правым краем */
+        top: 50%;
+        transform: translateY(-50%);
+        width: 250px;           /* ширина фото, подбери под своё */
+        height: auto;
+        border-radius: 24px;
+        box-shadow: 0 20px 35px rgba(0,0,0,0.3);
+        opacity: 0.9;
+        transition: none;
+        pointer-events: auto;
+    }
+
+    /* Анимация выезда в центр */
+    .sliding-image.slide-in {
+        animation: slideFromRightToCenter 2s ease forwards;
+    }
+
+    /* Анимация уезда влево */
+    .sliding-image.slide-out {
+        animation: slideFromCenterToLeft 2s ease forwards;
+    }
+
+    @keyframes slideFromRightToCenter {
+        0% {
+            right: -300px;
+            opacity: 0;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            right: 50%;
+            transform: translate(50%, -50%); /* центрирование */
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideFromCenterToLeft {
+        0% {
+            right: 50%;
+            transform: translate(50%, -50%);
+            opacity: 1;
+        }
+        100% {
+            right: 100%;
+            transform: translate(0%, -50%);
+            opacity: 0;
+        }
+    }
+</style>
+
+<!-- Кнопка (вставь её туда, где хочешь, например под большим жёлтым текстом) -->
+<div style="text-align: center;">
+    <button class="future-button" id="futureButton">🎁 Предвкушения небольшого будущего)</button>
+</div>
+
+<!-- Контейнер для выезжающей картинки (невидим пока) -->
+<div class="sliding-image-container" id="slidingContainer">
+    <img class="sliding-image" id="slidingImg" src="future.jpg" alt="Предвкушение">
+</div>
+
+<!-- Звук (короткий, можно заменить на свой) -->
+<audio id="futureSound" preload="auto">
+    <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+    <!-- Если звук не загрузится, можно встроить альтернативу через Web Audio, но это проще -->
+</audio>
+
+<script>
+    (function() {
+        const button = document.getElementById('futureButton');
+        const img = document.getElementById('slidingImg');
+        const sound = document.getElementById('futureSound');
+        let isAnimating = false;   // чтобы нельзя было спамить кнопкой
+
+        // Убедимся, что звук может играть (некоторые браузеры требуют взаимодействия)
+        // Но кнопка уже будет после клика — ок.
+
+        button.addEventListener('click', function() {
+            if (isAnimating) return;  // не запускаем, если анимация уже идёт
+            isAnimating = true;
+
+            // Убираем предыдущие классы, перезапускаем
+            img.classList.remove('slide-in', 'slide-out');
+            void img.offsetHeight; // форсируем рефлоу (чтобы анимация сработала заново)
+
+            // Заменяем фото на ту картинку, которую ты хочешь (можно динамически)
+            // Например, пусть у тебя есть несколько фото — можно менять src, но пока оставим статичное.
+            // Я задам future.jpg — замени на своё имя файла.
+            img.src = 'future.jpg';  // поменяй на своё фото!
+
+            // Показываем контейнер (на всякий случай)
+            document.getElementById('slidingContainer').style.display = 'block';
+
+            // Запускаем анимацию выезда в центр
+            img.classList.add('slide-in');
+
+            // Когда анимация выезда закончится (через 2 секунды)
+            img.addEventListener('animationend', function onEnd(e) {
+                if (e.animationName === 'slideFromRightToCenter') {
+                    // Удаляем обработчик, чтобы не сработал повторно
+                    img.removeEventListener('animationend', onEnd);
+                    
+                    // Проигрываем звук
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.log('Звук не воспроизвёлся:', e));
+                    
+                    // Ждём 2 секунды (фото стоит на месте)
+                    setTimeout(() => {
+                        // Запускаем анимацию уезда влево
+                        img.classList.remove('slide-in');
+                        img.classList.add('slide-out');
+                        
+                        // После окончания уезда чистим классы и разрешаем новое нажатие
+                        img.addEventListener('animationend', function onOut(e) {
+                            if (e.animationName === 'slideFromCenterToLeft') {
+                                img.removeEventListener('animationend', onOut);
+                                img.classList.remove('slide-out');
+                                isAnimating = false;
+                                // опционально скрыть контейнер
+                                // document.getElementById('slidingContainer').style.display = 'none';
+                            }
+                        });
+                    }, 2000); // 2 секунды ожидания в центре
+                }
+            });
+        });
+    })();
+</script>
+<!-- ========== КОНЕЦ БЛОКА ========== -->
+    
 </body>
 </html>
